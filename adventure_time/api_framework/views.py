@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from atus.models import Respondent, ActivityResponse, ActivityTitle
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.serializers import ModelSerializer
-
+import django_filters
 
 def hello(request):
     all_respondents = Respondent.objects.all()
@@ -76,15 +76,20 @@ class ActivityTitleDetailView(RetrieveAPIView):
     serializer_class = ActivityTitleSerializer
 
 
-class RespondentFilterView(ListAPIView):
+"""class RespondentFilterView(ListAPIView):
     serializer_class = RespondentSerializer
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         queryset = Respondent.objects.all()
-        respondent_age = self.request.query_params.get('age')
         new_set = []
         for respondent in queryset:
             if respondent.age <= 50:
                 new_set.append(respondent)
         queryset = new_set
-        return queryset
+        return queryset"""
+
+
+class RespondentFilterView(django_filters.FilterSet):
+    serializer_class = RespondentSerializer
+    lookup_url_kwarg = Respondent.age
+
