@@ -1,5 +1,5 @@
 from django.core import serializers
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from atus.models import Respondent, ActivityResponse, ActivityTitle
@@ -90,6 +90,14 @@ class ActivityTitleDetailView(RetrieveAPIView):
 
 
 class RespondentFilterView(django_filters.FilterSet):
-    serializer_class = RespondentSerializer
-    lookup_url_kwarg = Respondent.age
+
+    class Meta:
+        model = Respondent
+        fields = ['age', 'sex', 'education', 'race', 'metro_status', 'labor_status', 'wkly_earnings', 'multiple_job_status',
+                  'full_or_part_job_status', 'school_enrollment', 'school_level', 'typical_work_hrs']
+
+
+def respondent_filter_list(request):
+    f = RespondentFilterView(request.GET, queryset=Respondent.objects.all())
+    return render_to_response('my_app/template.html', {'filter': f})
 
