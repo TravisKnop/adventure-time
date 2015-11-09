@@ -10,4 +10,3 @@ class RespondentFilter(django_filters.FilterSet):
         model = Respondent
         fields = {'age': ['lt', 'gt'], 'sex': ['exact']}
 
-
