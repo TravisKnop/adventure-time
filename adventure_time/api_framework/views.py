@@ -2,6 +2,7 @@ from django.core import serializers
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
+from api_framework.models import RespondentFilter
 from atus.models import Respondent, ActivityResponse, ActivityTitle
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.serializers import ModelSerializer
@@ -86,18 +87,15 @@ class ActivityTitleDetailView(RetrieveAPIView):
             if respondent.age <= 50:
                 new_set.append(respondent)
         queryset = new_set
-        return queryset"""
+        return queryset
 
 
-class RespondentFilterView(django_filters.FilterSet):
-
-    class Meta:
-        model = Respondent
-        fields = ['age', 'sex', 'education', 'race', 'metro_status', 'labor_status', 'wkly_earnings', 'multiple_job_status',
+        , 'education', 'race', 'metro_status', 'labor_status', 'wkly_earnings', 'multiple_job_status',
                   'full_or_part_job_status', 'school_enrollment', 'school_level', 'typical_work_hrs']
+                  """
 
-
+@csrf_exempt
 def respondent_filter_list(request):
-    f = RespondentFilterView(request.GET, queryset=Respondent.objects.all())
-    return render_to_response('my_app/template.html', {'filter': f})
+    f = RespondentFilter(request.GET, queryset=Respondent.objects.all())
+    return render_to_response(RespondentListView, {'filter': f})
 

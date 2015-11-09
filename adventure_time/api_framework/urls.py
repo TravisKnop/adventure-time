@@ -1,8 +1,9 @@
 
 from django.conf.urls import include, url
 from django.contrib import admin
+from api_framework import views
 from api_framework.views import api_respondent_detail_view, api_respondent_list_view, hello, RespondentListView, \
-    RespondentDetailView, ActivityTitleListView, ActivityTitleDetailView, RespondentFilterView
+    RespondentDetailView, ActivityTitleListView, ActivityTitleDetailView
 
 
 class HouseholdMemberListView(object):
@@ -12,7 +13,7 @@ class HouseholdMemberListView(object):
 urlpatterns = [
     url(r'respondent/$', RespondentListView.as_view(), name="api_respondent_list_view"),
     url(r'respondent/(?P<pk>\d+)/$', RespondentDetailView.as_view(), name="api_respondent_detail_view"),
-    url(r'respondent/filter/list$', RespondentFilterView.as_view(), name="api_respondent_filter_view"),
+    url(r'activity/filter/$', views.respondent_filter_list, name="api_respondent_filter_view"),
     url(r'activity/$', ActivityTitleListView.as_view(), name="api_activity_title_list_view"),
     url(r'activity/(?P<pk>\d+)/$', ActivityTitleDetailView.as_view(), name="api_activity_title_detail_view"),
 ]
