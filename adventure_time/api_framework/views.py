@@ -75,3 +75,16 @@ class ActivityTitleDetailView(RetrieveAPIView):
     queryset = ActivityTitle.objects.all()
     serializer_class = ActivityTitleSerializer
 
+
+class RespondentFilterView(ListAPIView):
+    serializer_class = RespondentSerializer
+
+    def get_queryset(self):
+        queryset = Respondent.objects.all()
+        respondent_age = self.request.query_params.get('age')
+        new_set = []
+        for respondent in queryset:
+            if respondent.age <= 50:
+                new_set.append(respondent)
+        queryset = new_set
+        return queryset
